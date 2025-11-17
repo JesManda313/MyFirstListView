@@ -34,11 +34,20 @@ class FragmentBahan : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if (data.isEmpty()) {
+            val namaArray = resources.getStringArray(R.array.data_nama_bahan)
+            val kategoriArray = resources.getStringArray(R.array.data_kategori_bahan)
+            val urlArray = resources.getStringArray(R.array.data_url_bahan)
 
-        if (data.isEmpty()){
-            data.add(Bahan("Keju", "Nabati", "https://bit.ly/3yDw9jK"))
-            data.add(Bahan("Sapi", "Protein", ""))
-            data.add(Bahan("Nasi", "Karbohidrat", ""))
+            for (i in namaArray.indices) {
+                data.add(
+                    Bahan(
+                        nama = namaArray[i],
+                        kategori = kategoriArray[i],
+                        imageUrl = urlArray[i]
+                    )
+                )
+            }
         }
         setupRecyclerView()
 
