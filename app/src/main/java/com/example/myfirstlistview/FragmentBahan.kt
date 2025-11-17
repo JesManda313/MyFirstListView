@@ -19,9 +19,7 @@ class FragmentBahan : Fragment() {
     private var _binding: FragmentBahanBinding? = null
     private val binding get() = _binding!!
 
-    // [POIN 3] Inisialisasi PrefManager
     private lateinit var prefManager: PrefManager
-
     var data = mutableListOf<Bahan>()
     private lateinit var adapterBahan: BahanAdapter
 
@@ -36,13 +34,10 @@ class FragmentBahan : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // [POIN 3] Siapkan PrefManager
         prefManager = PrefManager(requireContext())
 
-        // [POIN 3] LOAD DATA DARI SHARED PREFERENCES
-        data = prefManager.loadBahanList()
+        data = prefManager.loadData("dt_bahan")
 
-        // Jika data di SP kosong (pertama kali install), ambil dari XML (Poin 2)
         if (data.isEmpty()) {
             val namaArray = resources.getStringArray(R.array.data_nama_bahan)
             val kategoriArray = resources.getStringArray(R.array.data_kategori_bahan)
@@ -57,8 +52,7 @@ class FragmentBahan : Fragment() {
                     )
                 )
             }
-            // [POIN 3] Simpan data awal XML ini ke SP agar tersimpan permanen
-            prefManager.saveBahanList(data)
+            prefManager.saveData("dt_bahan", data)
         }
 
         setupRecyclerView()
@@ -73,7 +67,11 @@ class FragmentBahan : Fragment() {
         adapterBahan = BahanAdapter(
             data,
             onCartClick = { item ->
-                Toast.makeText(requireContext(), "Masuk Cart: ${item.nama}", Toast.LENGTH_SHORT).show()
+                val cartList = prefManager.loadData("dt_cart")
+                cartList.add(item)
+                prefManager.saveData("dt_cart", cartList)
+
+                Toast.makeText(requireContext(), "${item.nama} masuk keranjang!", Toast.LENGTH_SHORT).show()
             },
             onItemClick = { item, position ->
                 showActionDialog(position, item)
@@ -92,7 +90,7 @@ class FragmentBahan : Fragment() {
 
         val layout = LinearLayout(requireContext())
         layout.orientation = LinearLayout.VERTICAL
-        layout.setPadding(40, 30, 40, 8)
+        layout.setPadding(50, 40, 50, 10)
 
         val etNama = EditText(requireContext()); etNama.hint = "Masukkan nama bahan"
         val etKategori = EditText(requireContext()); etKategori.hint = "Masukkan kategori"
@@ -101,17 +99,16 @@ class FragmentBahan : Fragment() {
         layout.addView(etNama); layout.addView(etKategori); layout.addView(etUrl)
         builder.setView(layout)
 
-        builder.setPositiveButton("Save") { dialog, _ ->
+        builder.setPositiveButton("Simpan") { dialog, _ ->
             val nama = etNama.text.toString().trim()
             val kategori = etKategori.text.toString().trim()
             val url = etUrl.text.toString().trim()
 
             if (nama.isNotEmpty() && kategori.isNotEmpty()) {
-                data.add(Bahan(nama, kategori, url))
+                data.add(Bahan(nama = nama, kategori = kategori, imageUrl = url))
                 adapterBahan.notifyDataSetChanged()
 
-                // [POIN 3] SIMPAN KE SP SETELAH TAMBAH
-                prefManager.saveBahanList(data)
+                prefManager.saveData("dt_bahan", data)
 
                 Toast.makeText(requireContext(), "Bahan '$nama' ditambahkan", Toast.LENGTH_SHORT).show()
             } else {
@@ -126,7 +123,7 @@ class FragmentBahan : Fragment() {
     private fun showActionDialog(position: Int, itemTerpilih: Bahan) {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Item: ${itemTerpilih.nama}")
-        builder.setMessage("Pilih yang ingin dilakukan")
+        builder.setMessage("Pilih tindakan yang ingin dilakukan")
 
         builder.setPositiveButton("Update Kategori") { _, _ ->
             showUpdateCategoryDialog(position, itemTerpilih)
@@ -136,11 +133,11 @@ class FragmentBahan : Fragment() {
             adapterBahan.notifyItemRemoved(position)
             adapterBahan.notifyItemRangeChanged(position, data.size)
 
-            // [POIN 3] SIMPAN KE SP SETELAH HAPUS
-            prefManager.saveBahanList(data)
+            prefManager.saveData("dt_bahan", data)
 
             Toast.makeText(requireContext(), "Delete Item ${itemTerpilih.nama}", Toast.LENGTH_SHORT).show()
         }
+
         builder.setNeutralButton("Batal") { dialog, _ -> dialog.dismiss() }
         builder.create().show()
     }
@@ -166,18 +163,16 @@ class FragmentBahan : Fragment() {
 
         builder.setView(layout)
 
-        builder.setPositiveButton("Save") { dialog, _ ->
+        builder.setPositiveButton("Simpan") { dialog, _ ->
             val newValue = etNewKategori.text.toString().trim()
             if (newValue.isNotEmpty()) {
                 data[position].kategori = newValue
                 adapterBahan.notifyItemChanged(position)
+                prefManager.saveData("dt_bahan", data)
 
-                // [POIN 3] SIMPAN KE SP SETELAH UPDATE
-                prefManager.saveBahanList(data)
-
-                Toast.makeText(requireContext(), "Kategori sudah diupdate: $newValue", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Kategori diupdate: $newValue", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(requireContext(), "Kategori baru ga boleh kosong", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Kategori baru tidak boleh kosong", Toast.LENGTH_SHORT).show()
             }
             dialog.dismiss()
         }

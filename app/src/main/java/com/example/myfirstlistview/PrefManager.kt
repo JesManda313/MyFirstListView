@@ -8,16 +8,14 @@ import com.google.gson.reflect.TypeToken
 class PrefManager(context: Context) {
     private val sp: SharedPreferences = context.getSharedPreferences("AppBahanMasakan", Context.MODE_PRIVATE)
     private val gson = Gson()
-    fun saveBahanList(list: MutableList<Bahan>) {
+
+    fun saveData(key: String, list: MutableList<Bahan>) {
         val jsonString = gson.toJson(list)
-        val editor = sp.edit()
-        editor.putString("dt_bahan", jsonString)
-        editor.apply()
+        sp.edit().putString(key, jsonString).apply()
     }
 
-    fun loadBahanList(): MutableList<Bahan> {
-        val jsonString = sp.getString("dt_bahan", null)
-
+    fun loadData(key: String): MutableList<Bahan> {
+        val jsonString = sp.getString(key, null)
         return if (jsonString != null) {
             val type = object : TypeToken<MutableList<Bahan>>() {}.type
             gson.fromJson(jsonString, type)
@@ -25,6 +23,7 @@ class PrefManager(context: Context) {
             mutableListOf()
         }
     }
+
     fun clearData() {
         sp.edit().clear().apply()
     }
