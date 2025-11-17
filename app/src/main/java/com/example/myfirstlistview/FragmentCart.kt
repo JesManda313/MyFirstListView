@@ -37,7 +37,17 @@ class FragmentCart : Fragment() {
 
     private fun setupRecyclerView() {
         adapterCart = CartAdapter(listCart) { item, position ->
-            Toast.makeText(requireContext(), "Item dibeli: ${item.nama}", Toast.LENGTH_SHORT).show()
+            val listBought = prefManager.loadData("dt_bought")
+            listBought.add(item)
+            prefManager.saveData("dt_bought", listBought)
+
+            listCart.removeAt(position)
+            prefManager.saveData("dt_cart", listCart)
+
+            adapterCart.notifyItemRemoved(position)
+            adapterCart.notifyItemRangeChanged(position, listCart.size)
+
+            Toast.makeText(requireContext(), "${item.nama} dibeli!", Toast.LENGTH_SHORT).show()
         }
 
         binding.rvCart.apply {
