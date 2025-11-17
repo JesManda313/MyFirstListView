@@ -3,15 +3,14 @@
     <string-array name="data_nama_bahan">
         <item>Daging Ayam</item>
         <item>Daging Sapi</item>
-        <item>Telur Ayam</item>
+        <item>Telur</item>
         <item>Tempe</item>
-        <item>Tahu Putih</item>
-        <item>Ikan Nila</item>
+        <item>Tahu</item>
+        <item>Ikan</item>
         <item>Udang</item>
         <item>Bawang Merah</item>
         <item>Bawang Putih</item>
-        <item>Cabai Rawit</item>
-        <item>Cabai Merah</item>
+        <item>Cabai</item>
         <item>Tomat</item>
         <item>Wortel</item>
         <item>Kentang</item>
@@ -20,7 +19,8 @@
         <item>Brokoli</item>
         <item>Jahe</item>
         <item>Kunyit</item>
-        <item>Kecap Manis</item>
+        <item>Kecap</item>
+        <item>Garam</item>
     </string-array>
 
     <string-array name="data_kategori_bahan">
@@ -34,22 +34,20 @@
         <item>Bumbu</item>
         <item>Bumbu</item>
         <item>Bumbu</item>
+        <item>Sayur</item>
+        <item>Sayur</item>
+        <item>Sayur</item>
+        <item>Sayur</item>
+        <item>Sayur</item>
+        <item>Sayur</item>
+        <item>Rempah</item>
+        <item>Rempah</item>
         <item>Bumbu</item>
-        <item>Sayur</item>
-        <item>Sayur</item>
-        <item>Sayur</item>
-        <item>Sayur</item>
-        <item>Sayur</item>
-        <item>Sayur</item>
-        <item>Rempah</item>
-        <item>Rempah</item>
         <item>Bumbu</item>
     </string-array>
 
     <string-array name="data_url_bahan">
-        <item>https://bit.ly/3yDw9jK</item>
-        <item>https://bit.ly/3yDw9jK</item>
-        <item>https://bit.ly/3yDw9jK</item>
+        <item>https://bit.ly/3yDw9jK</item> <item></item> <item></item>
         <item></item>
         <item></item>
         <item></item>

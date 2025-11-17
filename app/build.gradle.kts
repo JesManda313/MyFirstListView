@@ -56,4 +56,5 @@ dependencies {
 
     implementation(libs.picasso)
     implementation(libs.androidx.recyclerview)
+    implementation(libs.gson)
 }
