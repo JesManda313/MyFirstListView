@@ -36,7 +36,6 @@ class MainActivity : AppCompatActivity() {
             drawerLayout.openDrawer(GravityCompat.START)
         }
 
-        // === TAMPILAN LISTVIEW AWAL ===
         data.addAll(listOf("1", "2", "3", "4", "5"))
         val lvAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, data)
         val lv1 = findViewById<ListView>(R.id.lv1)
@@ -61,19 +60,12 @@ class MainActivity : AppCompatActivity() {
         )
         lv1.setOnTouchListener { _, event -> gestureDetector.onTouchEvent(event) }
 
-        // === NAVIGATION DRAWER HANDLER ===
         navView.setNavigationItemSelectedListener { menuItem ->
-
             when (menuItem.itemId) {
-
-                // ================= HOME =================
                 R.id.homeFragment -> {
-                    // kembali ke tampilan awal (listview)
                     supportFragmentManager.popBackStack(null, 1)
                     Toast.makeText(this, "Kembali ke Home", Toast.LENGTH_SHORT).show()
                 }
-
-                // ================= BAHAN (FRAGMENT) =================
                 R.id.bahanFragment -> {
                     val fragment = FragmentBahan()
                     supportFragmentManager.beginTransaction()
@@ -81,8 +73,14 @@ class MainActivity : AppCompatActivity() {
                         .addToBackStack(null)
                         .commit()
                 }
+                R.id.cartFragment -> {
+                    val fragment = FragmentCart()
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.main_content, fragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
             }
-
             drawerLayout.closeDrawers()
             true
         }

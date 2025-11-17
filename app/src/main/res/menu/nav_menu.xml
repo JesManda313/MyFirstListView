@@ -3,15 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="nav_view">
+
     <item
         android:id="@+id/homeFragment"
         android:title="HOME"
         android:icon="@drawable/outline_account_circle_24"/>
-
 
     <item
         android:id="@+id/bahanFragment"
         android:title="BAHAN"
         android:icon="@drawable/outline_cannabis_24"/>
 
-</menu>
+    <item
+        android:id="@+id/cartFragment"
+        android:title="KERANJANG"
+        android:icon="@drawable/baseline_shopping_cart_24"/> </menu>
